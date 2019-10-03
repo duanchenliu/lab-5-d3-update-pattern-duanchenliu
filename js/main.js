@@ -124,7 +124,7 @@ function updateVisualization() {
 	
 	// Data join
 	let update = svg.selectAll('rect')
-	.data(data); 
+		.data(data,function(d) { return d.company; }); 
 
 	// Enter
 	if (rankMetric == "stores"){
@@ -137,18 +137,22 @@ function updateVisualization() {
 		.attr("height", d=>height - y(d.stores));
 
 		// Update
-	update
-	.attr('fill', 'green')
-	.attr("class", "bar")
-	.attr("x", d=>x(d.company))
-	.attr("y", d=>y(d.stores))
-	.attr("width", x.bandwidth())
-	.attr("height", d=>height - y(d.stores))
-	.merge(barGroup)
-     .style("opacity", 0.5)
-     .transition()
-     .duration(1000)
-     .style("opacity", 1);
+		update
+		.attr("class", "bar")
+		.merge(update)
+    	 .style("opacity", 0.5)
+    	 .transition()
+		 .duration(2000)
+   	     
+		 .attr("x", function(d) {
+			return x(d.company);
+		  })
+		 .attr("y", d=>y(d.stores))
+		 .attr("width", x.bandwidth())
+		 .attr("height", d=>height - y(d.stores))
+		 .style("opacity", 1)
+		// .style("opacity", 0)
+		;
 
 
 	// Exit
@@ -160,11 +164,11 @@ function updateVisualization() {
 	// Draw Axes
 	xGroup.transition()
 	  .attr("class", "x-axis axis")
-	  .duration(1000)
+	  .duration(2000)
 	  .call(xAxis);
 	yGroup.transition()
 	  .attr("class", "y-axis axis")
-	  .duration(1000)
+	  .duration(2000)
 	  .call(yAxis);
 	
 	}else {
@@ -178,17 +182,20 @@ function updateVisualization() {
 
 		// Update
 	update
-	.attr('fill', 'green')
 	.attr("class", "bar")
-	.attr("x", d=>x(d.company))
+	.merge(svg)
+     .style("opacity", 0.5)
+     .transition()
+	 .duration(2000)
+    
+	 .attr("x", function(d) {
+		return x(d.company);
+	  })
 	.attr("y", d=>y(d.revenue))
 	.attr("width", x.bandwidth())
 	.attr("height", d=>height - y(d.revenue))
-	.merge(barGroup)
-     .style("opacity", 0.5)
-     .transition()
-     .duration(1000)
-     .style("opacity", 1);
+	.style("opacity", 1)
+	;
 
 	// Exit
 	update.exit()
@@ -197,13 +204,15 @@ function updateVisualization() {
 		.remove();
 	
 	// Draw Axes
-	xGroup.transition()
+	xGroup
+		.transition()
 		.attr("class", "x-axis axis")
-		.duration(1000)
+		.duration(2000)
 		.call(xAxis);
-	yGroup.transition()
+	yGroup
+		.transition()
 		.attr("class", "y-axis axis")
-		.duration(1000)
+		.duration(2000)
 		.call(yAxis);
 	}
 }
